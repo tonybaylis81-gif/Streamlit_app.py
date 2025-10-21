@@ -34,7 +34,16 @@ st.line_chart(data["Close"])
 data["SMA_20"] = data["Close"].rolling(window=20).mean()
 data["SMA_50"] = data["Close"].rolling(window=50).mean()
 
-# Calculate RSI using `ta`
+# Calculate RSI using `ta`# Calculate RSI using `ta`
+close_prices = data["Close"]
+
+# Some tickers may return multi-column data (especially if yfinance returns OHLC data as a DataFrame)
+if isinstance(close_prices, pd.DataFrame):
+    close_prices = close_prices.iloc[:, 0]
+
+rsi_indicator = ta.momentum.RSIIndicator(close_prices, window=14)
+data["RSI"] = rsi_indicator.rsi()
+
 data["RSI"] = ta.momentum.RSIIndicator(data["Close"], window=14).rsi()
 
 # Show Data and Indicators
