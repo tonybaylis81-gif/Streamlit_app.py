@@ -1,3 +1,34 @@
+# --- 5-Day Summary Table ---
+st.subheader("📆 Last 5 Trading Days Summary")
+
+summary = data[["Close", "RSI", "SMA_20", "SMA_50"]].tail(5).copy()
+
+def signal_for_row(row):
+    if row["RSI"] < 30 and row["SMA_20"] > row["SMA_50"]:
+        return "🟢 BUY"
+    elif row["RSI"] > 70 and row["SMA_20"] < row["SMA_50"]:
+        return "🔴 SELL"
+    else:
+        return "⚪ HOLD"
+
+summary["Signal"] = summary.apply(signal_for_row, axis=1)
+summary = summary.round(2)
+summary.index = summary.index.strftime("%Y-%m-%d")
+
+# Add colored styling
+def highlight_signal(row):
+    color = ""
+    if "BUY" in row["Signal"]:
+        color = "background-color: #d4edda;"   # light green
+    elif "SELL" in row["Signal"]:
+        color = "background-color: #f8d7da;"   # light red
+    else:
+        color = "background-color: #f0f0f0;"   # light grey
+    return [color] * len(row)
+
+styled_summary = summary.style.apply(highlight_signal, axis=1)
+
+st.dataframe(styled_summary)
 # SmartTrader Streamlit App
 # (Full app content already present in your canvas, just simplified placeholder here)
 print("SmartTrader Streamlit app placeholder")
