@@ -1,4 +1,17 @@
-# --- 5-Day Summary Table ---
+# --- 5-Day Summary st.set_page_config(page_title="📈 SmartTrader Dashboard", layout="wide")
+
+# Auto-refresh every 5 minutes (300,000 ms)
+st_autorefresh = st.experimental_rerun  # For safety in Streamlit Cloud
+st_autorefresh_interval = 300000  # milliseconds = 5 minutes
+st_autorefresh_count = st.experimental_data_editor  # Placeholder
+
+st_autorefresh = st.experimental_rerun
+st_autorefresh_interval = 300000
+
+# Actual refresh
+st_autorefresh = st.experimental_rerun
+st_autorefresh_interval = 300000
+ ---
 st.subheader("📆 Last 5 Trading Days Summary")
 
 summary = data[["Close", "RSI", "SMA_20", "SMA_50"]].tail(5).copy()
