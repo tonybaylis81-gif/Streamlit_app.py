@@ -3,6 +3,38 @@
 # Refresh every 5 minutes (300,000 ms)
 st_autorefresh(interval=300000, limit=None, key="datarefresh")
  Summary st.set_page_config(page_title="📈 SmartTrader Dashboard", layout="wide")
+# --- AI Price Prediction ---
+st.subheader("🤖 AI Prediction (Next 5 Days)")
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+
+# Prepare the data
+df = data[["Close", "SMA_20", "SMA_50", "RSI"]].dropna().copy()
+df["Target"] = df["Close"].shift(-5)  # predict 5 days ahead
+df.dropna(inplace=True)
+
+X = df[["Close", "SMA_20", "SMA_50", "RSI"]]
+y = df["Target"]
+
+# Train/test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
+
+# Train model
+model = RandomForestRegressor(n_estimators=200, random_state=42)
+model.fit(X_train, y_train)
+
+# Predict the next 5 days
+latest = X.tail(1)
+predicted_price = model.predict(latest)[0]
+
+current_price = df["Close"].iloc[-1]
+trend = "📈 Likely to RISE" if predicted_price > current_price else "📉 Likely to FALL"
+
+# Display results
+col1, col2 = st.columns(2)
+col1.metric("Current Price", f"${current_price:.2f}")
+col2.metric("Predicted Price (5 days ahead)", f"${predicted_price:.2f}", trend)
 
 # Auto-refresh every 5 minutes (300,000 ms)
 st_autorefresh = st.experimental_rerun  # For safety in Streamlit Cloud
