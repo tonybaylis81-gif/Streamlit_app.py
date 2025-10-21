@@ -1,4 +1,8 @@
-# --- 5-Day Summary st.set_page_config(page_title="📈 SmartTrader Dashboard", layout="wide")
+# --- from streamlit_autorefresh import st_autorefresh
+
+# Refresh every 5 minutes (300,000 ms)
+st_autorefresh(interval=300000, limit=None, key="datarefresh")
+ Summary st.set_page_config(page_title="📈 SmartTrader Dashboard", layout="wide")
 
 # Auto-refresh every 5 minutes (300,000 ms)
 st_autorefresh = st.experimental_rerun  # For safety in Streamlit Cloud
