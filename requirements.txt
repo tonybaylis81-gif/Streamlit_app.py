@@ -4,4 +4,3 @@ pandas
 numpy
 ta
 matplotlib
-sqlite3-binary
