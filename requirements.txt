@@ -5,3 +5,4 @@ numpy
 ta
 matplotlib
 streamlit-autorefresh
+scikit-learn
