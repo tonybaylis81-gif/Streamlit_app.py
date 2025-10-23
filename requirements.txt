@@ -2,11 +2,6 @@ streamlit
 yfinance
 pandas
 numpy
-tastreamlit
-yfinance
-pandas
-numpy
 ta
 matplotlib
 streamlit-autorefresh
-
