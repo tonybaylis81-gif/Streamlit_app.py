@@ -44,8 +44,16 @@ data = load_data(ticker, period)
 # --- Technical Indicators ---
 data["SMA_20"] = data["Close"].rolling(window=20).mean()
 data["SMA_50"] = data["Close"].rolling(window=50).mean()
-
 rsi_indicator = ta.momentum.RSIIndicator(data["Close"], window=14)
+# --- RSI Calculation (fixed for multi-dimensional Close column) ---
+close_series = data["Close"]
+
+# If 'Close' is accidentally a DataFrame (2D), convert to a Series (1D)
+if isinstance(close_series, pd.DataFrame):
+    close_series = close_series.iloc[:, 0]
+
+# Compute RSI safely
+rsi_indicator = ta.momentum.RSIIndicator(close_series.squeeze(), window=14)
 data["RSI"] = rsi_indicator.rsi()
 
 # --- Store data to SQLite (optional local storage example) ---
