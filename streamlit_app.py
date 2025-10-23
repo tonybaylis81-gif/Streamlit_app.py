@@ -1,4 +1,58 @@
 # --- from streamlit_autorefresh import st_autorefresh
+# --- Import Libraries ---
+import streamlit as st
+from streamlit_autorefresh import st_autorefresh
+import pandas as pd
+import numpy as np
+import yfinance as yf
+import matplotlib.pyplot as plt
+import datetime as dt
+import ta  # technical analysis library
+
+# --- Streamlit Page Config ---
+st.set_page_config(
+    page_title="📈 SmartTrader Dashboard",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+st.title("📊 SmartTrader Dashboard")
+st.write("An AI-powered stock analysis dashboard that helps you make smarter trading decisions.")
+
+# --- Sidebar Settings ---
+st.sidebar.header("Settings")
+ticker = st.sidebar.text_input("Enter Stock Symbol (e.g., AAPL, TSLA, MSFT)", value="AAPL")
+period = st.sidebar.selectbox("Select Time Period", ["1mo", "3mo", "6mo", "1y", "2y"], index=2)
+
+# --- Fetch Stock Data ---
+@st.cache_data
+def load_data(ticker, period):
+    end = dt.datetime.now()
+    start = end - pd.DateOffset(months=int(period.replace("mo","").replace("y","12")))
+    data = yf.download(ticker, start=start, end=end)
+    data.dropna(inplace=True)
+    return data
+
+data = load_data(ticker, period)
+
+# --- Technical Indicators ---
+data["SMA_20"] = data["Close"].rolling(window=20).mean()
+data["SMA_50"] = data["Close"].rolling(window=50).mean()
+
+rsi_indicator = ta.momentum.RSIIndicator(data["Close"], window=14)
+data["RSI"] = rsi_indicator.rsi()
+
+# --- Display Tabs ---
+st.subheader(f"📈 {ticker} Analysis")
+
+tab1, tab2 = st.tabs(["📊 Price & Moving Averages", "📉 RSI Indicator"])
+
+with tab1:
+    st.line_chart(data[["Close", "SMA_20", "SMA_50"]])
+
+with tab2:
+    fig, ax = plt.subplots(figsize=(10, 3))
+    ax.plot(data.i
 
 # Refresh every 5 import streamlit as st
 import yfinance as yf
