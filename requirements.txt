@@ -5,11 +5,3 @@ numpy
 ta
 matplotlib
 sqlite3-binary
-streamlit
-yfinance
-pandas
-numpy
-ta
-matplotlib
-streamlit-autorefresh
-sqlite3-binary
